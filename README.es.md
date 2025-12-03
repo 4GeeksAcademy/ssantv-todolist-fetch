@@ -1,72 +1,66 @@
-# Lista de Tareas en React — Añadir, Completar y Borrar Tareas
+# To-Do con Usuarios — Añadir, Editar, Completar y Borrar Tareas
 
-Este proyecto es una aplicación sencilla de lista de tareas (To-Do List) desarrollada con **React**, donde puedes añadir nuevas tareas, marcarlas como realizadas, eliminarlas individualmente o borrar toda la lista con un solo clic.
+Esta aplicación es una **lista de tareas dinámica en React**, conectada a la **API de To-Do de 4Geeks**, que permite gestionar tareas por usuario: añadir, completar, editar, eliminar y administrar usuarios.
 
+---
 
-## Detalles importantes
+## Características principales
 
-- Toda la aplicación se renderiza dinámicamente mediante **componentes de React**.
-- El proyecto utiliza **estados (`useState`)** para gestionar:
-  - El contenido del input
-  - La lista de tareas
-  - Las tareas marcadas como completadas
-- El proyecto inicia con **varias tareas predefinidas**, pensadas para:
-  - Mostrar rápidamente el funcionamiento.
-  - Permitir probar la aplicación sin necesidad de escribir tareas desde cero.
-  - Usar el botón **"Nueva lista"**, que elimina toda la lista para empezar desde cero.
-- El diseño utiliza **CSS personalizado**, sin librerías externas adicionales.
+### 1. Gestión de usuario
+- El usuario debe introducir su nombre antes de usar la aplicación.
+- Si el usuario **no existe**, la app lo crea automáticamente en la API.
+- Una vez logueado:
+  - Se cargan sus tareas.
+  - Puede cambiar de usuario con **“¿No eres tú?”**.
+  - Puede eliminar su cuenta y todas sus tareas.
 
-## Funcionalidades principales
+### 2. Añadir tareas
+- Añadir tareas mediante botón **"Enviar"** o tecla **Enter**.
+- Validaciones:
+  - No se permite añadir tareas sin usuario.
+  - No se permite enviar un input vacío.
+- La tarea se guarda en la API y se recarga la lista de manera automática.
 
-### 1. Añadir tareas
-- El usuario puede escribir una tarea en el campo de texto.
-- Se puede añadir una tarea de **dos formas**:
-  - Pulsando el botón **"Enviar"**
-  - Pulsando la tecla **Enter**
-- Al añadir una tarea:
-  - Se agrega a la lista.
-  - El campo de texto se vacía automáticamente.
-  - Si el input está vacío, se muestra una alerta.
+### 3. Marcar tareas como completadas
+- Clic sobre una tarea → alterna entre completada y no completada.
+- Se actualiza en la API mediante un request `PUT`.
 
-### 2. Marcar tareas como completadas
-- Al hacer clic sobre una tarea, esta se marca como completada.
-- Las tareas completadas se muestran con un estilo tachado.
-- Si se vuelve a hacer clic, la tarea se desmarca.
+### 4. Editar tareas
+- Cada tarea tiene botón **“Editar”**.
+- Se abre un modal usando **SweetAlert2**.
+- Se actualiza el contenido tanto en la API como en el estado local.
 
-### 3. Eliminar tareas individuales
-- Cada tarea incluye un botón **"X"** para eliminarla.
-- Al borrar una tarea:
-  - La lista se actualiza correctamente.
-  - Los índices del estado de tareas completadas se reajustan para mantener la coherencia.
+### 5. Eliminar tareas
+- Botón **“Borrar”** por cada tarea.
+- Elimina la tarea en la API y en el estado local de inmediato.
 
-### 4. Contador de tareas pendientes
-- Debajo de la lista se muestra cuántas tareas quedan sin completar.
-- El número se actualiza automáticamente al completar o eliminar tareas.
+### 6. Contador de tareas pendientes
+- Muestra cuántas tareas quedan por completar.
+- Se actualiza automáticamente al modificar la lista.
 
-### 5. Vaciar toda la lista
-- Botón **"Nueva lista"**:
-  - Elimina TODAS las tareas (incluyendo las predefinidas).
-  - Reinicia también el estado interno de tareas completadas.
-- Perfecto para comenzar desde cero.
+### 7. Sistema de mensajes de alerta
+Mensajes dinámicos según la situación:
+- Usuario creado automáticamente.
+- Usuario eliminado.
+- Error por no introducir usuario.
+- Error por no introducir tarea.
 
-## Cómo usar la aplicación:
+## Cómo usar la aplicación
 
-- Escribe una tarea en el campo de texto.
-- Añádela pulsando Enter o el botón "Enviar".
-- Haz clic sobre una tarea para marcarla o desmarcarla.
-- Pulsa "X" para borrar una tarea concreta.
-- Usa "Nueva lista" para vaciar todo (incluyendo las tareas predefinidas).
-- Revisa el contador de tareas pendientes bajo la lista.
+1. Introduce tu nombre de usuario.
+2. Añade tareas usando el input.
+3. Haz clic sobre una tarea para marcarla como completada.
+4. Presiona **Editar** para modificar una tarea.
+5. Presiona **Borrar** para eliminarla.
+6. Cambia de usuario con **“¿No eres tú?”**.
+7. Elimina el usuario para borrar todas las tareas.
+8. Observa el contador de tareas pendientes bajo la lista.
 
-## Notas
+---
 
-- El estado done controla cuáles tareas están completadas, usando sus índices.
-- Al eliminar una tarea, los índices del estado done se reajustan para mantener la coherencia.
-- El CSS incluye detalles como tachado personalizado, sombras, iconos SVG y efectos hover.
+## Mejoras futuras sugeridas
 
-## Mejoras sugeridas
-
-- Añadir la posibilidad de editar tareas existentes.
-- Implementar animaciones al añadir, borrar o completar tareas.
-- Incluir filtros: todas, completadas, pendientes.
-- Validar tareas duplicadas o añadir límites de caracteres.
+- Filtros: **todas / completadas / pendientes**.
+- Animaciones al añadir y eliminar tareas.
+- Búsqueda de duplicados.
+- Sugerencias de tareas.
