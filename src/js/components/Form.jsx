@@ -116,7 +116,6 @@ const Form = () => {
 
     return (
         <div className="card">
-            <Message user={user} error={error} />
             {user === "" ? (
                 <form className="m-2 d-flex align-items-center gap-2" onSubmit={handleUserSubmit}>
                     <input
@@ -150,6 +149,7 @@ const Form = () => {
                 <input type="submit" value="Enviar" className="submit" />
             </form>
             <List user={user} list={list} url={url} deleteTask={deleteTask} updateTask={updateTask} />
+            <Message user={user} error={error} />
         </div>
     );
 };

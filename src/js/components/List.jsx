@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/list.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const List = ({ user, list, url, deleteTask, updateTask }) => {
+  const MySwal = withReactContent(Swal);
+
 
   const handleToggleDone = async (id, bool) => {
     const response = await fetch(`${url}/todos/${id}`, {
@@ -14,15 +18,38 @@ const List = ({ user, list, url, deleteTask, updateTask }) => {
     updateTask(id, { is_done: updated.is_done });
   };
 
+ 
   const handleDelete = async (e, id) => {
     e.stopPropagation();
     await fetch(`${url}/todos/${id}`, { method: "DELETE" });
     deleteTask(id);
   };
 
-  const handleEdit = (e, id) => {
-    console.log("Estás editando la", id);
-    //Añadir un modal que tenga un input y un checkbox
+  const showSwal = async (e, task) => {
+    e.stopPropagation();
+
+    const { value: newValue } = await MySwal.fire({
+      title: <i>Editar tarea</i>,
+      input: "text",
+      inputValue: task.label,
+      showCancelButton: true,
+      confirmButtonText: "Guardar",
+    });
+
+    if (newValue && newValue.trim() !== "") {
+      handleEdit(task.id, newValue);
+    }
+  };
+
+  const handleEdit = async (id, newLabel) => {
+    const response = await fetch(`${url}/todos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ label: newLabel })
+    });
+
+    const updated = await response.json();
+    updateTask(id, { label: updated.label });
   };
 
   const pending = list.filter(tasks => !tasks.is_done).length;
@@ -31,7 +58,7 @@ const List = ({ user, list, url, deleteTask, updateTask }) => {
     <>
       <ul>
         {user === "" ? (
-          <p className="m-2">Inserta un usuario</p>
+          <p className="m-2 fs-6">No se pueden mostrar tareas sin un usuario</p>
         ) : list && list.length > 0 ? (
           list.map((el) => (
             <li
@@ -45,7 +72,7 @@ const List = ({ user, list, url, deleteTask, updateTask }) => {
 
               <button
                 className="editButton buttonLi"
-                onClick={(e) => handleEdit(e, el.id)}
+                onClick={(e) => showSwal(e, el)}
               >
                 Editar
               </button>
@@ -59,12 +86,12 @@ const List = ({ user, list, url, deleteTask, updateTask }) => {
             </li>
           ))
         ) : (
-          <p className="m-2">No hay tareas guardadas</p>
+          <p className="m-2 fs-6">No hay tareas guardadas</p>
         )}
       </ul>
 
       <div className="remainingTasks">
-        {pending} tareas pendientes
+        {pending == 1 ? "1 tarea pendiente" : pending == 0 ? "No hay tareas pendientes" : `${pending} tareas pendientes`}
       </div>
     </>
   );
